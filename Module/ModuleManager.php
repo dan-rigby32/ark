@@ -182,7 +182,12 @@ class ModuleManager implements IModuleManager {
     if ( isset( $request->route->module ) ){
       return $this->GetModule( $request->route->module )->Dispatch( $request );
     }
-    return $this->GetModule( $this->_defaultModule )->Dispatch( $request );
+    else if ( $this->_defaultModule ){
+      return $this->GetModule( $this->_defaultModule )->Dispatch( $request );
+    }
+    else{
+      throw new ModuleException( "Could not dispatch request. No default module in configuration." );
+    }
   }
   
   /**
