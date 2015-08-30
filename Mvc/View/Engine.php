@@ -23,6 +23,7 @@ use Ark\Module\IModuleManager;
 use Ark\Mvc\View\IRenderer;
 use Ark\Mvc\View\Exception\ViewEngineException;
 use Ark\Helper\Utility;
+use Ark\Config\Config;
 
 /**
  * The View Engine
@@ -35,8 +36,8 @@ class Engine implements IEngine {
    * @var array $_viewSet Layout path locations
    */
   protected $_viewSet = [
-    "/%defaultModule/Views/Shared/%viewFile.php",
     "/%module/Views/%controller/%viewFile.php",
+    "/%defaultModule/Views/Shared/%viewFile.php",
     "/%module/Views/Shared/%viewFile.php",
     "/%systemModule/Views/Shared/%viewFile.php"
   ];
@@ -51,7 +52,7 @@ class Engine implements IEngine {
   ];
 
   /**
-   * @var array $_layoutSet Layout path locations
+   * @var array viewStart file path locations
    */
   protected $_viewStartSet = [
     "/%module/Views/ViewStart.php"
@@ -61,8 +62,8 @@ class Engine implements IEngine {
    * @var array $_viewSet Layout path locations
    */
   protected $_partialSet = [
-    "/%defaultModule/Views/Shared/_%viewFile.php",
     "/%module/Views/Partials/_%viewFile.php",
+    "/%defaultModule/Views/Shared/_%viewFile.php",
     "/%module/Views/Shared/_%viewFile.php",
     "/%systemModule/Views/Shared/_%viewFile.php"
   ];
@@ -81,14 +82,14 @@ class Engine implements IEngine {
    * Constructor.
    * @param Ark\Module\ModuleManager $moduleManager The application module manager.
    * @param ViewRenderer $viewRenderer The view renderer.
-   * @param array $moduleConfig Module configuration array.
+   * @param Ark\Config\Config $moduleConfig Module configuration object.
    */
-  public function __construct( IModuleManager $moduleManager, IRenderer $viewRenderer, $moduleConfig ) {
+  public function __construct( IModuleManager $moduleManager, IRenderer $viewRenderer, Config $moduleConfig ) {
     $this->_moduleManager = &$moduleManager;
     $this->_viewRenderer = $viewRenderer;
-    $this->_modulesDir = $moduleConfig['modulesDir'];
-    $this->_systemModule = $moduleConfig['systemModule'];
-    $this->_defaultModule = $moduleConfig['defaultModule'];
+    $this->_modulesDir = $moduleConfig->modulesDir;
+    $this->_systemModule = $moduleConfig->systemModule;
+    $this->_defaultModule = $moduleConfig->defaultModule;
     
     // Give the renderer access to the engine.
     $this->_viewRenderer->SetViewEngine( $this );
@@ -154,7 +155,7 @@ class Engine implements IEngine {
     // Search pathset for proper path.
     $pathSet = $this->_GetPathSet( $type );
     $tokens = $this->_route;
-    $tokens['module'] = $module == null ? $tokens['module'] : $module;
+    $tokens['module'] = $module ?: $tokens['module'];
     $tokens['viewFile'] = $viewName;
     $tokens['layout'] = $this->_viewRenderer->layout;
     $tokens['defaultModule'] = $this->_defaultModule;
@@ -263,7 +264,7 @@ class Engine implements IEngine {
    * @return string The current environment.
    */
   public function Environment(){
-    return $this->_moduleManager->GetConfig( "general" )['environment'];
+    return $this->_moduleManager->GetService( "Environment" );
   }
 
   /**

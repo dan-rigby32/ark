@@ -36,22 +36,23 @@ class Ark {
   public function Run(){
     
     // Load Services.
-    $serviceConfig = $this->_config->Get( "service" );
-    $serviceManager = new $serviceConfig['manager']( $this->_config );
+    $serviceClass = $this->_config->Get( "service" )->manager;
+    $serviceManager = new $serviceClass( $this->_config );
     
     // Open Database Connection.
     $db = $this->_config->Get( "db" );
     $connection = $serviceManager->Get( "Connection" );
     $connection->Connect(
-      $db['servername'],
-      $db['dbname'],
-      $db['username'],
-      $db['password']
+      $db->servername,
+      $db->dbname,
+      $db->username,
+      $db->password
     );
 
     // Load Modules.
     $moduleConfig = $this->_config->Get( "module" );
-    $moduleManager = new $moduleConfig['manager']( $serviceManager, $moduleConfig );
+    $moduleClass = $moduleConfig->manager;
+    $moduleManager = new $moduleClass( $serviceManager, $moduleConfig );
 
     // Route Application.
     $request = $moduleManager->Route();

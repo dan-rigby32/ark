@@ -19,7 +19,8 @@
 
 namespace Ark\Module;
 
-use Ark\Service\ServiceManager;
+use Ark\Service\IServiceManager;
+use Ark\Config\Config;
 
 /**
  * @author drigby
@@ -28,10 +29,10 @@ interface IModuleManager {
   
   /**
    * Constructor.
-   * @param ServiceManager The Service Manager object.
-   * @param array $moduleConfig The module conguration array.
+   * @param Ark\Servic\IServiceManager The Service Manager object.
+   * @param Ark\Config\Config $moduleConfig The module conguration object.
    */
-  public function __construct( ServiceManager $serviceManager, $moduleConfig );
+  public function __construct( IServiceManager $serviceManager, Config $moduleConfig );
   
   /**
    * Scan the modules directory for a list of existing modules.

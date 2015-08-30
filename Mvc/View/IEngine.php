@@ -21,6 +21,7 @@ namespace Ark\Mvc\View;
 
 use Ark\Module\IModuleManager;
 use Ark\Mvc\View\IRenderer;
+use Ark\Config\Config;
 
 /**
  *
@@ -32,9 +33,9 @@ interface IEngine {
    * Constructor.
    * @param Ark\Module\ModuleManager $moduleManager The application module manager.
    * @param ViewRenderer $viewRenderer The view renderer.
-   * @param array $moduleConfig Module configuration array.
+   * @param Ark\Config\Config $moduleConfig Module configuration object.
    */
-  public function __construct( IModuleManager $moduleManager, IRenderer $viewRenderer, $moduleConfig );
+  public function __construct( IModuleManager $moduleManager, IRenderer $viewRenderer, Config $moduleConfig );
   
   /**
    * Find the view file.

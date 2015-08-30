@@ -25,8 +25,6 @@ use Ark\Service\Exception\ServiceManagerException;
 
 /**
  * Service Manager.
- *
- * @author drigby
  */
 class ServiceManager implements IServiceManager {
   
@@ -46,7 +44,8 @@ class ServiceManager implements IServiceManager {
     "ViewEngine" => 'Ark\Mvc\View\EngineFactory',
     "Query" => 'Ark\Db\Mysql\QueryFactory',
     "Definition" => 'Ark\Mvc\Model\DefinitionFactory',
-    "Collection" => 'Ark\Db\Collection\CollectionFactory'
+    "Collection" => 'Ark\Db\Collection\CollectionFactory',
+    "Environment" => 'Ark\Helper\EnvironmentFactory'
   ];
 
   protected $_functions = [];
@@ -61,7 +60,7 @@ class ServiceManager implements IServiceManager {
    */
   public function __construct( Configuration $config ){
     $this->_config = $config;
-    $this->SetServices( $config->Get( "service" ) );
+    $this->SetServices( $config->Get( "service" )->ToArray() );
   }
   
   /**

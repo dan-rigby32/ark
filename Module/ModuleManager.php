@@ -23,7 +23,8 @@ namespace Ark\Module;
 use Ark\AutoLoader\AutoLoader;
 use Ark\Helper\Utility;
 use Ark\Module\Exceptions\ModuleException;
-use Ark\Service\ServiceManager;
+use Ark\Service\IServiceManager;
+use Ark\Config\Config;
 
 class ModuleManager implements IModuleManager {
 
@@ -36,14 +37,14 @@ class ModuleManager implements IModuleManager {
 
   /**
    * Constructor.
-   * @param ServiceManager The Service Manager object.
-   * @param array $moduleConfig The module conguration array.
+   * @param Ark\Service\IServiceManager The Service Manager object.
+   * @param Ark\Config\Config $moduleConfig The module conguration object.
    */
-  public function __construct( ServiceManager $serviceManager, $moduleConfig ){
+  public function __construct( IServiceManager $serviceManager, Config $moduleConfig ){
     $this->_serviceManager = $serviceManager;
-    $this->_modulesDir = $moduleConfig['modulesDir'];
-    $this->_systemModule = isset( $moduleConfig['systemModule'] ) ? $moduleConfig['systemModule'] : false;
-    $this->_defaultModule = isset( $moduleConfig['defaultModule'] ) ? $moduleConfig['defaultModule'] : false;
+    $this->_modulesDir = $moduleConfig->modulesDir;
+    $this->_systemModule = $moduleConfig->systemModule;
+    $this->_defaultModule = $moduleConfig->defaultModule;
     
     // Make module manager an accessable service.
     $this->_serviceManager->SetModuleManager( $this );
@@ -58,8 +59,8 @@ class ModuleManager implements IModuleManager {
     if ( isset( $system ) && method_exists( $system, "InitializeModules" ) ){
       $system->InitializeModules();
     }
-    else if ( isset( $moduleConfig['modules'] ) ){
-      foreach ( $moduleConfig['modules'] as $key ){
+    else if ( $moduleConfig->modules ){
+      foreach ( $moduleConfig->modules as $key ){
         $this->AddModule( $key );
       }
     }

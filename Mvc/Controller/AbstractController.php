@@ -49,7 +49,7 @@ abstract class AbstractController implements IController {
     $this->_module = &$module;
     $this->_request = $request;
     $this->_modelBinder = $module->GetService( "ModelBinder" );
-    $this->_systemModule = $module->GetConfig( "module" )['systemModule'];
+    $this->_systemModule = $module->GetConfig( "module" )->systemModule;
   }
   
   /**
