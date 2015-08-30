@@ -66,10 +66,10 @@ interface IModuleManager {
   
   /**
    * Get a module object.
-   * @param string $key The module's key. Defaults to system module.
+   * @param string $key The module's key.
    * @return Module The requested module object.
    */
-  public function &GetModule( $key = null );
+  public function &GetModule( $key );
   
   /**
    * Trigger an event that other modules can hook into.

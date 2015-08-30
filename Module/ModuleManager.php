@@ -124,13 +124,10 @@ class ModuleManager implements IModuleManager {
   
   /**
    * Get a module object.
-   * @param string $key The module's key. Defaults to system module.
+   * @param string $key The module's key.
    * @return Module The requested module object.
    */
-  public function &GetModule( $key = null ){
-    if ( $key === null ){
-      $key = $this->_systemModule;
-    }
+  public function &GetModule( $key ){
     return $this->_modules[$key];
   }
 
@@ -142,10 +139,10 @@ class ModuleManager implements IModuleManager {
   public function TriggerEvent( $name, &$target = null ){
     $eventMethod = $name . "Event";
     $output = [];
-    $return = null;
-
+    
     foreach ( $this->_modules as &$module ){
       if ( method_exists( $module, $eventMethod ) ){
+        $return = null;
         if ( $target !== null ){
           $module->$eventMethod( $target );
         }
