@@ -267,10 +267,10 @@ abstract class AbstractController implements IController {
   
   /**
    * Environment config.
-   * @return string The current environment.
+   * @return Ark\Helper\Environment The current environment.
    */
   public function Environment(){
-    return $this->_module->GetConfig( "general" )['environment'];
+    return $this->GetService( "Environment" );
   }
   
   /**

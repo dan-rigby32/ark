@@ -85,7 +85,7 @@ interface IEngine {
   
   /**
    * Environment config.
-   * @return string The current environment.
+   * @return Ark\Helper\Environment The current environment.
    */
   public function Environment();
   

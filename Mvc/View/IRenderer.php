@@ -69,7 +69,7 @@ interface IRenderer {
   
   /**
    * Current Environment.
-   * @return string The curren enviroment from config.
+   * @return Ark\Helper\Environment The current enviroment.
    */
   public function Environment();
 
