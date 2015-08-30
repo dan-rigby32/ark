@@ -42,23 +42,26 @@ class ModuleManager implements IModuleManager {
   public function __construct( ServiceManager $serviceManager, $moduleConfig ){
     $this->_serviceManager = $serviceManager;
     $this->_modulesDir = $moduleConfig['modulesDir'];
-    $this->_systemModule = $moduleConfig['systemModule'];
-    $this->_defaultModule = $moduleConfig['defaultModule'];
+    $this->_systemModule = isset( $moduleConfig['systemModule'] ) ? $moduleConfig['systemModule'] : false;
+    $this->_defaultModule = isset( $moduleConfig['defaultModule'] ) ? $moduleConfig['defaultModule'] : false;
     
     // Make module manager an accessable service.
     $this->_serviceManager->SetModuleManager( $this );
     
     // Set up System module.
-    $this->AddModule( $this->_systemModule );
-    $system = $this->GetModule( $this->_systemModule );
-    if ( method_exists( $system, "ServiceConfigEvent" ) ){
-      $this->_serviceManager->SetServices( $system->ServiceConfigEvent() );
+    if ( $this->_systemModule ){
+      $this->AddModule( $this->_systemModule );
+      $system = $this->GetModule( $this->_systemModule );
     }
     
     // Add active modules.
-    $modules = $this->_ListAllModules();
-    foreach ( $system->ActiveModules( $modules ) as $key ){
-      $this->AddModule( $key );
+    if ( isset( $system ) && method_exists( $system, "InitializeModules" ) ){
+      $system->InitializeModules();
+    }
+    else if ( isset( $moduleConfig['modules'] ) ){
+      foreach ( $moduleConfig['modules'] as $key ){
+        $this->AddModule( $key );
+      }
     }
     
     // Add Module Sevice Coniguration.
@@ -68,10 +71,10 @@ class ModuleManager implements IModuleManager {
   }
   
   /**
-   * Scan the modules directory for the complete list of modules.
+   * Scan the modules directory for a list of existing modules.
    * @return array A list of all module keys.
    */
-  private function _ListAllModules(){
+  public function ListModules(){
     $list = [];
     foreach ( scandir( $this->_modulesDir ) as $dir ){
       if ( $dir != "." && $dir != ".." && is_dir( $this->_modulesDir . "/" . $dir ) ){
@@ -79,6 +82,14 @@ class ModuleManager implements IModuleManager {
       }
     }
     return $list;
+  }
+  
+  /**
+   * Get the path to the modules directory.
+   * @return string The path to the module directory.
+   */
+  public function ModulesDir(){
+    return $this->_modulesDir;
   }
 
   /**

@@ -24,15 +24,6 @@ namespace Ark\Module;
  * @author drigby
  */
 interface ISystemModule extends IModule {
-  
-  /**
-   * Get a list of the active modules. Module Manager uses this list to
-   * populate the application modules.
-   * @param array $modules A list of all modules (including inactive or
-   *                       uninstalled modules).
-   * @return array An array of module keys.
-   */
-  public function ActiveModules( $modules );
 
   /**
    * Get a system setting.

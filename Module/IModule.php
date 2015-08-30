@@ -63,18 +63,6 @@ interface IModule {
    * @return Module The requested module object.
    */
   public function &GetModule( $key = null );
-
-  /**
-   * Add a module to the application.
-   * @param string $key The module's key.
-   */
-  public function AddModule( $key );
-  
-  /**
-   * Remove a module from the application.
-   * @param string $key The module's key.
-   */
-  public function RemoveModule( $key );
   
   /**
    * Trigger an event that other modules can hook into.

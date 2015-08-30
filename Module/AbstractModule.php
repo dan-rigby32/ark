@@ -92,7 +92,7 @@ abstract class AbstractModule implements IModule {
    * Add a module to the application.
    * @param string $key The module's key.
    */
-  public function AddModule( $key ){
+  protected function AddModule( $key ){
     $this->_moduleManager->AddModule( $key );
   }
   
@@ -100,7 +100,7 @@ abstract class AbstractModule implements IModule {
    * Remove a module from the application.
    * @param string $key The module's key.
    */
-  public function RemoveModule( $key ){
+  protected function RemoveModule( $key ){
     $this->_moduleManager->RemoveModule( $key );
   }
   

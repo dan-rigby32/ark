@@ -34,6 +34,18 @@ interface IModuleManager {
   public function __construct( ServiceManager $serviceManager, $moduleConfig );
   
   /**
+   * Scan the modules directory for a list of existing modules.
+   * @return array A list of all module keys.
+   */
+  public function ListModules();
+  
+  /**
+   * Get the path to the modules directory.
+   * @return string The path to the module directory.
+   */
+  public function ModulesDir();
+  
+  /**
    * Add a module to the application.
    * @param string $key The module's key.
    */
